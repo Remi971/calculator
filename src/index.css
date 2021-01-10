@@ -1,13 +1,103 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Teko&display=swap');
+
+* {
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+:root {
+  --bleu_fonce: #0e153a;
+  --bleu_ciel: #00d1ff;
+  --bleu: #3d5af1;
+  --bleu_turquoise: #226089;
+  --rouge: #ff304f;
+}
+
+body {
+  font-family: 'Teko', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 80px);
+  grid-template-rows: 30px 30px repeat(5, 80px);
+  background-color: var(--bleu_fonce);
+  padding: 5px;
+  font-family: 'Teko', sans-serif;
+  text-align: center;
+}
+
+@font-face {
+  font-family: 'Handjet Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Handjet Regular'), url('Handjet[EGRD,ESHP,wght].woff') format('woff');
+}
+
+.display{
+  font-family: 'Handjet Regular';
+  grid-column: 1 / span 4;
+  grid-row: span 2;
+  background-color: var(--bleu_fonce);
+  color: #fa9e70;
+  font-size: 20px;
+  text-align: right;
+}
+
+#display {
+  color: #fff;
+  font-size: 26px;
+  padding-bottom: 3px;
+}
+
+#output {
+  height: 30px;
+}
+
+button {
+  font-family: 'Teko', sans-serif;
+  padding-top: 10px;
+  color: #fff;
+  font-size: 20px;
+  border: 1px solid #303a52;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:hover {
+  opacity: 50%;
+}
+
+.AC {
+  grid-column: 1 / span 2;
+  background-color: var(--rouge);
+}
+
+.division,
+.multiply,
+.minus,
+.plus {
+  background-color: var(--bleu_ciel);
+}
+
+.num {
+  background-color: var(--bleu_turquoise);
+}
+
+.zero {
+  grid-column: span 2;
+}
+
+.egal {
+  grid-column: 4 / 5;
+  grid-row: span 2;
+  background-color: var(--bleu);
 }
