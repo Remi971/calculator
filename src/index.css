@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Teko&display=swap');
-
+@import url(//db.onlinewebfonts.com/c/1e670d88b23c7ab956f1829e3828a210?family=Digital-7);
 * {
   box-sizing: border-box;
 }
@@ -33,15 +33,16 @@ body {
   text-align: center;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'Handjet Regular';
   font-style: normal;
   font-weight: normal;
   src: local('Handjet Regular'), url('Handjet[EGRD,ESHP,wght].woff') format('woff');
-}
+} */
+
 
 .display{
-  font-family: 'Handjet Regular';
+  font-family: 'Digital-7';
   grid-column: 1 / span 4;
   grid-row: span 2;
   background-color: var(--bleu_fonce);
