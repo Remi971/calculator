@@ -9,7 +9,8 @@ class App extends React.Component {
       input: '0',
       operation: '',
       output: '',
-      result:0
+      result:0,
+      decimal: false,
     };
   }
 
@@ -18,11 +19,11 @@ class App extends React.Component {
       return
     }
 
-    if(this.state.output.match(/[/*-+]$/)) {
+    if(this.state.output.match(/\W$/)) {
       this.setState(
         (prev) => ({
           input: e.target.innerHTML,
-          output: prev.output.replace(/[/*-+]$/, e.target.innerHTML),
+          output: prev.output.replace(/\W$/, e.target.innerHTML),
           operation: e.target.innerHTML
         })
       )
@@ -32,7 +33,7 @@ class App extends React.Component {
           input: e.target.innerHTML,
           output: prev.output + e.target.innerHTML,
           operation: e.target.innerHTML,
-          result: prev.input
+          result: Math.abs(prev.input)
         })
       )
     } else if (this.state.output.match(/=/)) {
@@ -49,12 +50,11 @@ class App extends React.Component {
           input: e.target.innerHTML,
           output: prev.output + e.target.innerHTML,
           operation: e.target.innerHTML,
-          result: Math.abs(operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)))
+          result: operators[prev.operation](prev.result, Math.abs(prev.input))
         })
       )
     }
   }
-
 
   handleClick = (e) => {
     if (this.state.input === '0') {
@@ -62,7 +62,7 @@ class App extends React.Component {
         input: e.target.innerHTML,
         output: e.target.innerHTML
       })
-    } else if (this.state.input.match(/^[/*-+]/)) {
+    } else if (this.state.input.match(/^\W/)) {
       this.setState(
         (prev) => ({
         input: e.target.innerHTML,
@@ -97,9 +97,9 @@ class App extends React.Component {
     if (this.state.operation !== '') {
       this.setState(
         (prev) => ({
-          result: Math.abs(operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input))),
+          input: operators[prev.operation](prev.result, Math.abs(prev.input)),
           output: prev.output + '=' + operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)),
-          input: operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)),
+          result: operators[prev.operation](prev.result, Math.abs(prev.input)),
           operation: ''
         })
       )
@@ -107,6 +107,15 @@ class App extends React.Component {
       return
     }
   }
+
+  decimal = (e) => {
+    if (this.state.decimal)
+    this.setState(
+      (prev) => ({
+        input: prev.input + '.'
+      })
+    )
+    }
 
   render() {
 
@@ -133,7 +142,7 @@ class App extends React.Component {
           <button onClick={this.handleClick} id='three' className='num'>3</button>
           <button onClick={this.equal} id='equals' className='egal'>=</button>
           <button onClick={this.handleClick} id='zero' className='num zero'>0</button>
-          <button id='decimal' className='num'>.</button>
+          <button onClick={this.decimal} id='decimal' className='num'>.</button>
         </div>
       </div>
     );
