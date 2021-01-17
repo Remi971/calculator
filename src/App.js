@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import {operators} from './operators.js'
 
 class App extends React.Component {
   constructor(props){
@@ -16,18 +17,12 @@ class App extends React.Component {
     if (this.state.output === '') {
       return
     }
-    const operators = {
-      '/': function(a,b){ return a/b},
-      '*': function(a,b){ return a*b},
-      '-': function(a,b){ return a-b},
-      '+': function(a,b){ return a+b},
-    }
 
     if(this.state.output.match(/[/*-+]$/)) {
       this.setState(
         (prev) => ({
           input: e.target.innerHTML,
-          output: prev.output.repace(/[/*-+]$/, e.target.innerHTML),
+          output: prev.output.replace(/[/*-+]$/, e.target.innerHTML),
           operation: e.target.innerHTML
         })
       )
@@ -40,13 +35,21 @@ class App extends React.Component {
           result: prev.input
         })
       )
+    } else if (this.state.output.match(/=/)) {
+      this.setState(
+        (prev) => ({
+          input: e.target.innerHTML,
+          output: prev.result + e.target.innerHTML,
+          operation: e.target.innerHTML
+        })
+      )
     } else {
       this.setState(
         (prev) => ({
           input: e.target.innerHTML,
           output: prev.output + e.target.innerHTML,
           operation: e.target.innerHTML,
-          result: operators[prev.operation](prev.result, prev.input)
+          result: Math.abs(operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)))
         })
       )
     }
@@ -66,6 +69,12 @@ class App extends React.Component {
         output: prev.output + e.target.innerHTML
         })
       )
+    } else if (this.state.output.match(/=/)) {
+      this.setState({
+        input: e.target.innerHTML,
+        output: e.target.innerHTML,
+        result: 0
+      })
     } else {
       this.setState(
         (prev) => ({
@@ -78,15 +87,29 @@ class App extends React.Component {
   clear = () => {
     this.setState({
       input: '0',
-      output: ''
+      output: '',
+      result: 0,
+      operation: ''
     });
   }
 
   equal = () => {
-    console.log(this.state.result);
+    if (this.state.operation !== '') {
+      this.setState(
+        (prev) => ({
+          result: Math.abs(operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input))),
+          output: prev.output + '=' + operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)),
+          input: operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)),
+          operation: ''
+        })
+      )
+    }else {
+      return
+    }
   }
 
   render() {
+
     return (
       <div className="App">
         <div className='container'>
