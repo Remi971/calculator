@@ -23,33 +23,35 @@ class App extends React.Component {
       '+': function(a,b){ return a+b},
     }
 
-    if (this.state.output.match(/[/*-+]$/)) {
+    if(this.state.output.match(/[/*-+]$/)) {
       this.setState(
         (prev) => ({
           input: e.target.innerHTML,
-          output: prev.output.replace(/[/*-+]$/, e.target.innerHTML),
+          output: prev.output.repace(/[/*-+]$/, e.target.innerHTML),
+          operation: e.target.innerHTML
+        })
+      )
+    } else if (this.state.result === 0) {
+      this.setState(
+        (prev) => ({
+          input: e.target.innerHTML,
+          output: prev.output + e.target.innerHTML,
           operation: e.target.innerHTML,
-          })
-        )
-      } else if (this.state.result === 0){
-        this.setState(
-          (prev) => ({
-            input: e.target.innerHTML,
-            output: prev.output + e.target.innerHTML,
-            operation: e.target.innerHTML,
-            result: prev.input
-          })
-      } else {
-        this.setState(
-          (prev) => ({
-            input: e.target.innerHTML,
-            output: prev.output + e.target.innerHTML,
-            operation: e.target.innerHTML,
-            result: operators[prev.operation](prev.result, prev.input),
-            })
-        )
-      }
+          result: prev.input
+        })
+      )
+    } else {
+      this.setState(
+        (prev) => ({
+          input: e.target.innerHTML,
+          output: prev.output + e.target.innerHTML,
+          operation: e.target.innerHTML,
+          result: operators[prev.operation](prev.result, prev.input)
+        })
+      )
+    }
   }
+
 
   handleClick = (e) => {
     if (this.state.input === '0') {
