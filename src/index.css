@@ -10,6 +10,7 @@
   --bleu: #3d5af1;
   --bleu_turquoise: #226089;
   --rouge: #ff304f;
+  --bg: #303a52
 }
 
 body {
@@ -21,6 +22,7 @@ body {
   height: 100vh;
   overflow: hidden;
   margin: 0;
+  background-color: var(--bg);
 }
 
 .container {
