@@ -15,19 +15,41 @@ class App extends React.Component {
   }
 
   operation = (e) => {
+    // On ne peut pas commencer par un operator
     if (this.state.output === '') {
       return
     }
-
-    if(this.state.output.match(/\W$/)) {
+    // S'il y a déjà un opertor
+    if(this.state.output.match(/[*+/]$/)) {
+      // Si celui-ci est un "moins", On garde le précédent en mémoire et on peut ajouter le moins après
+      if (e.target.innerHTML === '-') {
+        this.setState(
+          (prev) => ({
+            input: e.target.innerHTML,
+            output: prev.output + e.target.innerHTML
+          })
+        )
+        // Si ce n'est pas un "moins" il peut alors être remplacé par un autre operator
+      } else {
+        this.setState(
+          (prev) => ({
+            input: e.target.innerHTML,
+            output: prev.output.replace(/\W$/, e.target.innerHTML),
+            operation: e.target.innerHTML,
+            decimal:false
+          })
+        )
+      }
+    } else if (this.state.output.match(/[*+/]-$/)) {
       this.setState(
         (prev) => ({
           input: e.target.innerHTML,
-          output: prev.output.replace(/\W$/, e.target.innerHTML),
+          output: prev.output.replace(/[*+/]-$/, e.target.innerHTML),
           operation: e.target.innerHTML,
-          decimal:false
+          decimal: false
         })
       )
+      // Si le résutat est égal à 0
     } else if (this.state.result === 0) {
       this.setState(
         (prev) => ({
@@ -38,6 +60,7 @@ class App extends React.Component {
           decimal: false
         })
       )
+      // Si on a déjà appuyé sur égale
     } else if (this.state.output.match(/=/)) {
       this.setState(
         (prev) => ({
@@ -54,25 +77,36 @@ class App extends React.Component {
           output: prev.output + e.target.innerHTML,
           operation: e.target.innerHTML,
           decimal: false,
-          result: operators[prev.operation](prev.result, Math.abs(prev.input))
+          result: operators[prev.operation](prev.result, parseFloat(prev.input))
         })
       )
     }
   }
 
   handleClick = (e) => {
+    //Au commencement losque input = 0
     if (this.state.input === '0') {
       this.setState({
         input: e.target.innerHTML,
         output: e.target.innerHTML
       })
+    //
     } else if (this.state.input.match(/^\W/)) {
-      this.setState(
-        (prev) => ({
-        input: e.target.innerHTML,
-        output: prev.output + e.target.innerHTML
-        })
-      )
+      if (this.state.input.match(/^-/) && this.state.operation !== '-') {
+        this.setState(
+          (prev) => ({
+            input: prev.input + e.target.innerHTML,
+            output: prev.output + e.target.innerHTML
+          })
+        )
+      } else {
+        this.setState(
+          (prev) => ({
+            input: e.target.innerHTML,
+            output: prev.output + e.target.innerHTML
+          })
+        )
+      }
     } else if (this.state.output.match(/=/)) {
       this.setState({
         input: e.target.innerHTML,
@@ -112,9 +146,9 @@ class App extends React.Component {
     if (this.state.operation !== '') {
       this.setState(
         (prev) => ({
-          input: operators[prev.operation](prev.result, Math.abs(prev.input)),
-          output: prev.output + '=' + operators[prev.operation](Math.abs(prev.result), Math.abs(prev.input)),
-          result: operators[prev.operation](prev.result, Math.abs(prev.input)),
+          input: operators[prev.operation](prev.result, parseFloat(prev.input)),
+          output: prev.output + '=' + operators[prev.operation](parseFloat(prev.result), parseFloat(prev.input)),
+          result: operators[prev.operation](prev.result, parseFloat(prev.input)),
           operation: ''
         })
       )
